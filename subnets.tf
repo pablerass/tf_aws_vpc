@@ -37,11 +37,13 @@ resource "aws_subnet" "private" {
 }
 
 resource "aws_route_table" "private" {
+  count = "${length(var.private_subnets_cidr_blocks)}"
+
   vpc_id = "${aws_vpc.main.id}"
 
   route {
     cidr_block = "0.0.0.0/0"
-    nat_gateway_id = "${aws_nat_gateway.private.id}"
+    nat_gateway_id = "${element(aws_nat_gateway.private.*.id, count.index % length(var.public_subnets_cidr_blocks))}"
   }
 
   tags = "${merge(var.tags, map("Name", format("private-%v", count.index + 1)), map("Module", var.module))}"
@@ -51,5 +53,5 @@ resource "aws_route_table_association" "private" {
   count = "${length(var.private_subnets_cidr_blocks)}"
 
   subnet_id = "${element(aws_subnet.private.*.id, count.index)}"
-  route_table_id = "${aws_route_table.private.id}"
+  route_table_id = "${element(aws_route_table.private.*.id, count.index)}"
 }

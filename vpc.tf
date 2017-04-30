@@ -12,14 +12,14 @@ resource "aws_internet_gateway" "main" {
 }
 
 resource "aws_eip" "private_nat" {
-  count = "${length(var.private_subnets_cidr_blocks)}"
+  count = "${length(var.public_subnets_cidr_blocks)}"
 
   vpc    = true
 }
 
 resource "aws_nat_gateway" "private" {
-  count = "${length(var.private_subnets_cidr_blocks)}"
+  count = "${length(var.public_subnets_cidr_blocks)}"
 
   allocation_id = "${element(aws_eip.private_nat.*.id, count.index)}"
-  subnet_id     = "${element(aws_subnet.private.*.id, count.index)}"
+  subnet_id     = "${element(aws_subnet.public.*.id, count.index)}"
 }
