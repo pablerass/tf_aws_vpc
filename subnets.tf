@@ -5,7 +5,7 @@ resource "aws_subnet" "public" {
   cidr_block        = "${element(var.public_subnets_cidr_blocks, count.index)}"
   availability_zone = "${data.aws_region.current.name}${element(var.letters, count.index)}"
 
-  tags = "${merge(var.tags, map("Name", format("public-%s", count.index + 1)), map("Module", var.module))}"
+  tags = "${merge(var.tags, map("Name", format("public-%v", count.index + 1)), map("Module", var.module))}"
 }
 
 resource "aws_route_table" "public" {
@@ -16,7 +16,7 @@ resource "aws_route_table" "public" {
     gateway_id = "${aws_internet_gateway.main.id}"
   }
 
-  tags = "${merge(var.tags, map("Name", format("public-%s", count.index + 1)), map("Module", var.module))}"
+  tags = "${merge(var.tags, map("Name", format("public-%v", count.index + 1)), map("Module", var.module))}"
 }
 
 resource "aws_route_table_association" "public" {
