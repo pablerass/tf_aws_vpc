@@ -8,7 +8,7 @@ resource "aws_vpc" "main" {
 resource "aws_internet_gateway" "main" {
   count = "${length(var.public_subnets_cidr_blocks) == 0 ? 0 : 1}"
 
-  vpc_id = "{aws_vpc.main.id}"
+  vpc_id = "${aws_vpc.main.id}"
 }
 
 resource "aws_eip" "private_nat" {
