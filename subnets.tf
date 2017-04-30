@@ -33,7 +33,7 @@ resource "aws_subnet" "private" {
   cidr_block        = "${element(var.private_subnets_cidr_blocks, count.index)}"
   availability_zone = "${data.aws_region.current.name}${element(var.letters, count.index)}"
 
-  tags = "${merge(var.tags, map("Name", format("private-%s", count.index + 1)), map("Module", var.module))}"
+  tags = "${merge(var.tags, map("Name", format("private-%v", count.index + 1)), map("Module", var.module))}"
 }
 
 resource "aws_route_table" "private" {
@@ -44,7 +44,7 @@ resource "aws_route_table" "private" {
     nat_gateway_id = "${aws_nat_gateway.private.id}"
   }
 
-  tags = "${merge(var.tags, map("Name", format("private-%s", count.index + 1)), map("Module", var.module))}"
+  tags = "${merge(var.tags, map("Name", format("private-%v", count.index + 1)), map("Module", var.module))}"
 }
 
 resource "aws_route_table_association" "private" {
